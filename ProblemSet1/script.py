@@ -25,7 +25,7 @@ x = directMethod(A, b)
 print('Solution vector x: {}'.format(x))
 print('Check if x is correct: {}'.format(np.round(np.dot(A, x), 0) == b))
 
-print('\n\nCoefficient matrix inversion is a direct method')
+print('\n\nCoefficient matrix inversion is a direct method. We may use this method since the invertible of matrix A exists. Once this is not the case the solution to the system may be approximated with the help of iterative methods')
 # %%
 # b) Solving the linear system via Gauss-Seidel iteration algorithm
 def gaussSeidel(A, b, maxIter=10e3, tol=1/10e3):
@@ -60,10 +60,9 @@ def gaussSeidel(A, b, maxIter=10e3, tol=1/10e3):
     U = A - L # upper triangular matrix
 
     while iterCond or errorCond != 1:
-        x1 = np.dot(
-            np.linalg.inv(L), b - np.dot(U, x0)
-        )
+        x1 = np.dot(np.linalg.inv(L), b - np.dot(U, x0))
         error = np.linalg.norm(x1-x0)
+        iteration += 1
         x0 = x1
 
         if error < tol:
@@ -71,5 +70,10 @@ def gaussSeidel(A, b, maxIter=10e3, tol=1/10e3):
         elif iterCond > maxIter:
             iterCond = 1
     
-    print('Convergence vector x: {}'.format(x0))
+    print('Vector x {} converged at iteration {}'.format(x0, iteration))
+
+print('\n\n Since the matrix is strictly diagonally dominant we may use the Gauss-Seidel method. The coefficient matrix is of shape (3,3) hence the method converged relatively fast. Due to very low error tolerance of 1/10e3 convergence vector x is very close to solution vector x found with the direct method of inversion of coefficient matrix')
 # %%
+# c) Computing condition number
+def conditionNumber(A):
+    return np.linalg.det(np.linalg.inv(A)) * np.linalg.det(A)
