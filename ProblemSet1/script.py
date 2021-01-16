@@ -77,3 +77,11 @@ print('\n\n Since the matrix is strictly diagonally dominant we may use the Gaus
 # c) Computing condition number
 def conditionNumber(A):
     return np.linalg.det(np.linalg.inv(A)) * np.linalg.det(A)
+
+k = conditionNumber(A)
+
+print('Condition number k(A): {}'.format(k))
+
+print('\n\nThe condition number equals 1. That means if we imposed a zero-error tolerance on the iterative method, it could in principle converge to true solution vector. However, the condition number says nothing with regards to the speed of convergence. Greater values of k imply precision loss of convergence vectors.')
+
+# %%
