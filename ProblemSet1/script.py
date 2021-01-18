@@ -1,8 +1,10 @@
 #%%
+# Importing libraries
 import sys
 import time
 
 import numpy as np
+import matplotlib.pyplot as plt
 #%%
 # Exercise 1
 
@@ -197,4 +199,40 @@ print('Time elapsed for a manual product: {}'.format(endM-startM))
 print('\nCheck condition the manual function is correct {}'.format(
     np.round(CA, 2) == np.round(CM, 2)))
 print('\n\n Put simply, legacy code and open-source code is much more efficient compared to our options. The reason behind this is that the core of such operators is written in C++ (which is much faster), and Python is just a wrapper')
+# %%
+# Exercise 3
+# a) Creating a vector of shape 10 filled with random numbers from a standard normal distribution
+x = np.random.rand(10)
+
+# b) Calculating the mean and the standard deviation of x
+Ex = np.mean(x)
+Sx = np.std(x)
+
+# c) Creating a random variable z
+mu = 1
+sigma = np.sqrt(2)
+z = np.random.normal(mu, sigma, 10)
+
+# d) Calculating the mean and the standard deviation of z
+Ez = np.mean(z)
+Sz = np.std(z)
+
+# e) Increasing sample size for z
+numObs = [10e2, 10e5]
+
+
+for n in numObs:
+    z = np.random.normal(mu, sigma, int(n))
+    Ez = np.mean(z)
+    Sz = np.std(z)
+
+    print('The mean and the std of z are {} and {}'.format(np.round(Ez, 5), np.round(Sz, 5)))
+    fig, ax = plt.subplots()
+    count, bins, ignored = ax.hist(z, 30, density=True)
+    ax.plot(
+        bins, 1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2)),
+        linewidth=2, color='r')
+    ax.set_title('Number of observations ' + str(n)) 
+
+print('\n\nIncreasing sample size from 1k to 1kk does contribute to a better precision of sample means and deviations to their corresponding true values. However, these adjustments are relatively weak compared to the increase of the sample size by 1k times')
 # %%
