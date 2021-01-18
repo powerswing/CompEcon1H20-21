@@ -1,6 +1,9 @@
 #%%
-import numpy as np
+import sys
+import time
 
+import numpy as np
+#%%
 # Exercise 1
 
 # a) MATLAB backslash operator on python using numpy
@@ -20,10 +23,10 @@ def directMethod(A, b):
     """
     return np.dot(np.linalg.inv(A), b)
 
-x = directMethod(A, b)
+xDir = directMethod(A, b)
 
-print('Solution vector x: {}'.format(x))
-print('Check if x is correct: {}'.format(np.round(np.dot(A, x), 0) == b))
+print('Solution vector x: {}'.format(xDir))
+print('Check if x is correct: {}'.format(np.round(np.dot(A, xDir), 0) == b))
 
 print('\n\nCoefficient matrix inversion is a direct method. We may use this method since the invertible of matrix A exists. Once this is not the case the solution to the system may be approximated with the help of iterative methods')
 # %%
@@ -70,7 +73,10 @@ def gaussSeidel(A, b, maxIter=10e3, tol=1/10e3):
         elif iterCond > maxIter:
             iterCond = 1
     
-    print('Vector x {} converged at iteration {}'.format(x0, iteration))
+    return x0, iteration
+    
+xConv, iteration = gaussSeidel(A, b)
+print('Vector x {} converged at iteration {}'.format(xConv, iteration))
 
 print('\n\n Since the matrix is strictly diagonally dominant we may use the Gauss-Seidel method. The coefficient matrix is of shape (3,3) hence the method converged relatively fast. Due to very low error tolerance of 1/10e3 convergence vector x is very close to solution vector x found with the direct method of inversion of coefficient matrix')
 # %%
@@ -84,4 +90,111 @@ print('Condition number k(A): {}'.format(k))
 
 print('\n\nThe condition number equals 1. That means if we imposed a zero-error tolerance on the iterative method, it could in principle converge to true solution vector. However, the condition number says nothing with regards to the speed of convergence. Greater values of k imply precision loss of convergence vectors.')
 
+# %%
+# Exercise 2
+
+# a) Determining epsilon
+def epsilonWhileLoop(tol):
+    """
+    Calculates the lowest possible value (epsilon_m) for a 'em + 0 > tol' condition in a while loop
+
+    Arguments:
+    tol - tolerance level. May take on any value in [0, 1]. Designed specifically for this function to converge faster. If set to zero, epsilon_m converges to the true epsilon of Python
+
+    Returns:
+    em - epsilon_m. The convergence function is epsilon_m = epsilon_m / 2
+    """
+    em = 1
+
+    while em + 0 > tol:
+        em = em/2 # convergence assumption
+    
+    return em, tol
+
+emW, tolW = epsilonWhileLoop(1/10e4)
+
+print('WHILE LOOP: e_m for a given tolerance level of {} is {}'.format(tolW, emW))
+
+def epsilonForLoop(tol, numIter):
+    """
+    Calculates the lowest possible value (epsilon_m) for a 'em + 0> tol' condition in a for loop
+
+    Arguments:
+    tol - tolerance level. May take on any value in [0, 1]. Designed specifically for this function to converge faster. If set to zero, epsilon_m converges to the true epsilon of Python
+    numIter - maximum number of iterations. If set to infinity, the argument is ignored as a stopping condition.
+
+    Returns:
+    em - epsilon_m. The convergence function is epsilon = epsilon / 2
+    """
+    em = 1
+
+    for i in range(numIter):
+        if em + 0 > tol:
+            em = em/2
+        else:
+            return em, tol, i
+
+emF, tolF, iterationF  = epsilonForLoop(1/10e4, 1000)
+
+print('FOR LOOP: e_m for a given tolerance level of {} is {}. For a defined convergence function it took {} iterations to reach the value below the tolerance'.format(tolF, emF, iterationF))
+
+print('\n\nThe system epsilon is given by {}. It is the lowest possible value in Python which may be checked by the condition e + 0 > 0'.format(sys.float_info.epsilon))
+# %%
+# b) Evaluating speed of direct addition and multiplication of matrices
+A = np.random.rand(400, 600)
+B = np.random.rand(400, 600)
+
+def matrixSum(A, B):
+    """
+    Performs matrix summation operation
+
+    Arguments:
+    A - input matrix 1
+    B - input matrix 2
+
+    Returns:
+    C - output matrix
+    """
+    C = np.zeros([400, 600]) # define a zero-matrix of shape (400,600)
+    
+    for i in range(A.shape[0]): # iterate over row values
+        for ii in range(A.shape[1]): # iterate over column values
+            C[i, ii] = A[i, ii] + B[i, ii]
+
+    return C
+
+startA = time.time()
+C = A + B
+endA = time.time()
+
+startM = time.time()
+C = matrixSum(A, B)
+endM = time.time()
+
+print('Time elapsed for an automatic summation: {}'.format(endA-startA))
+print('Time elapsed for a manual summation: {}'.format(endM-startM))
+
+def matrixProd(A, B):
+    C = np.zeros([A.shape[0], B.shape[0]]) # defines a zero-matrix of shape (A.shape[1], B.shape[0])
+
+    for i in range(A.shape[0]):
+        for ii in range(B.shape[0]):
+            for iii in range(B.shape[1]):
+                C[i, ii] += A[i, iii] * B[ii, iii]
+
+    return C
+
+startA = time.time()
+CA = np.dot(A, np.transpose(B))
+endA = time.time()
+
+startM = time.time()
+CM = matrixProd(A, B)
+endM = time.time()
+
+print('Time elapsed for an automatic product: {}'.format(endA-startA))
+print('Time elapsed for a manual product: {}'.format(endM-startM))
+print('\nCheck condition the manual function is correct {}'.format(
+    np.round(CA, 2) == np.round(CM, 2)))
+print('\n\n Put simply, legacy code and open-source code is much more efficient compared to our options. The reason behind this is that the core of such operators is written in C++ (which is much faster), and Python is just a wrapper')
 # %%
