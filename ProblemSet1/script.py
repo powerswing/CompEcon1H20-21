@@ -262,7 +262,7 @@ def olsEstimator(n):
     x2 = np.random.uniform(low, high, n) # vector of features 3
     X = np.transpose(np.matrix([np.ones(n), x1, x2])) # matrix of features with intercept
 
-    y = np.transpose(np.dot(X,b) + e) # explained vector
+    y = np.transpose(np.dot(X,bTrue) + e) # explained vector
 
     return np.dot(
         np.linalg.inv(np.dot(np.transpose(X), X)), np.dot(np.transpose(X), y))
