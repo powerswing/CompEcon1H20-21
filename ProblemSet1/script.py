@@ -4,6 +4,8 @@ import sys
 import time
 
 import numpy as np
+import pandas as pd
+import statsmodels.api as st
 import matplotlib.pyplot as plt
 
 np.random.seed(1337)
@@ -239,7 +241,6 @@ for n in numObs:
 print('\n\nIncreasing sample size from 1k to 1kk does contribute to a better precision of sample means and deviations to their corresponding true values. However, these adjustments are relatively weak compared to the increase of the sample size by 1k times')
 # %%
 # Exercise 4
-# a)
 def olsEstimator(n):
     """
     Computes the estimator for beta using the standardazied OLS approach and setup from the problem 4.
@@ -278,4 +279,25 @@ for n in numObs:
         bStar - bTrue.reshape(3, 1)))
 
 print('The more observations we have the more closely the OLS estimations approach the true values of coefficient vector beta')
+# %%
+# Exercise 5
+workerflows = pd.read_excel("../Helpers/workerflows.xlsx", usecols="A:F", header=0)
+
+lam = 14400
+cycleEU, trendEU = st.tsa.filters.hpfilter(workerflows['EU'], lam) # cycle and trend component of log EU
+cycleUE, trendUE = st.tsa.filters.hpfilter(workerflows['UE'], lam) # cycle and trend component of log UE
+
+fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(14, 10))
+fig.tight_layout()
+ax1.plot(np.round(workerflows['Unnamed: 0'], 1), workerflows['EU'], label='EU')
+ax1.plot(np.round(workerflows['Unnamed: 0'], 1), trendEU, label='EU Trend')
+ax1.legend()
+ax2.plot(np.round(workerflows['Unnamed: 0'], 1), workerflows['UE'], label='UE')
+ax2.plot(np.round(workerflows['Unnamed: 0'], 1), trendUE, label='UE Trend')
+ax2.legend()
+ax3.plot(np.round(workerflows['Unnamed: 0'], 1), cycleEU, label='EU Cycle')
+ax3.plot(np.round(workerflows['Unnamed: 0'], 1), cycleUE, label='UE Cycle')
+ax3.legend()
+
+print('As seen from first two graphs HP filter approximates the trend component of both time series pretty well. This trend may be used as input data for further nonlinear analysis. As seen from graph three the cyclical component of the UE cycle is much stronger compared to the EU cycle.')
 # %%
