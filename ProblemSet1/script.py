@@ -5,6 +5,8 @@ import time
 
 import numpy as np
 import matplotlib.pyplot as plt
+
+np.random.seed(1337)
 #%%
 # Exercise 1
 
@@ -235,4 +237,45 @@ for n in numObs:
     ax.set_title('Number of observations ' + str(n)) 
 
 print('\n\nIncreasing sample size from 1k to 1kk does contribute to a better precision of sample means and deviations to their corresponding true values. However, these adjustments are relatively weak compared to the increase of the sample size by 1k times')
+# %%
+# Exercise 4
+# a)
+def olsEstimator(n):
+    """
+    Computes the estimator for beta using the standardazied OLS approach and setup from the problem 4.
+
+    Arguments:
+    X - matrix of covariates
+    y - vector of dependables
+
+    Returns:
+    b - estimates of coefficient vector
+    """
+    mu = 0 # expected value of normal distribution
+    sigma = 1 # variance = standard deviation of normal distribution
+    low = 0 # lowest boundary of uniform distribution
+    high = 100 # highest boundary of uniform distribution
+
+    e = np.random.normal(mu, sigma, n) # normally distributed normalized error term
+    x1 = np.random.uniform(low, high, n) # vector of features 1
+    x2 = np.random.uniform(low, high, n) # vector of features 3
+    X = np.transpose(np.matrix([np.ones(n), x1, x2])) # matrix of features with intercept
+
+    y = np.transpose(np.dot(X,b) + e) # explained vector
+
+    return np.dot(
+        np.linalg.inv(np.dot(np.transpose(X), X)), np.dot(np.transpose(X), y))
+
+numObs = [10, 100000]
+bTrue = np.array([2, 3, 5]) # true beta vector
+
+for n in numObs:
+
+    bStar = olsEstimator(n)
+
+    print('n = {}: OLS estimates for beta are\n{}'.format(n, bStar))
+    print('Difference between true values and estimated values is\n{}\n\n'.format(
+        bStar - bTrue.reshape(3, 1)))
+
+print('The more observations we have the more closely the OLS estimations approach the true values of coefficient vector beta')
 # %%
