@@ -2,10 +2,10 @@
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"><meta charset="utf-8">
 
-<title>temp-161125355052115756</title>
+<title>temp-161125859927838725</title>
 
-<script src="script_files/require.js"></script>
-<script src="script_files/jquery.js"></script>
+<script src="temp-161125859927838725_files/require.js"></script>
+<script src="temp-161125859927838725_files/jquery.js"></script>
 
 
 
@@ -13085,11 +13085,11 @@ div#notebook {
 </style>
 
 <!-- Custom stylesheet, it must be in the same directory as the html file -->
-<link rel="stylesheet" href="script_files/custom.html">
+<link rel="stylesheet" href="temp-161125859927838725_files/custom.html">
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="script_files/MathJax.js"></script>
+    <script src="temp-161125859927838725_files/MathJax.js"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config;executed=true">
     MathJax.Hub.Config({
@@ -13224,7 +13224,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -13259,7 +13259,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
@@ -13410,17 +13410,17 @@ Coefficient matrix inversion is a direct method. We may use this method since th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">conditionNumber</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="n">k</span> <span class="o">=</span> <span class="n">conditionNumber</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Condition number k(A): </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n\n</span><span class="s1">The condition number equals 1. That means if we imposed a zero-error tolerance on the iterative method, it could in principle converge to true solution vector. However, the condition number says nothing with regards to the speed of convergence. Greater values of k imply precision loss of convergence vectors.'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n\n</span><span class="s1">The condition number equals 2.8 which means this linear system is well conditioned. For 1</span><span class="si">% c</span><span class="s1">hange in ordinate vector the solution changes by at most 3%'</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13437,10 +13437,10 @@ Coefficient matrix inversion is a direct method. We may use this method since th
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Condition number k(A): 1.0
+<pre>Condition number k(A): 2.803427514506158
 
 
-The condition number equals 1. That means if we imposed a zero-error tolerance on the iterative method, it could in principle converge to true solution vector. However, the condition number says nothing with regards to the speed of convergence. Greater values of k imply precision loss of convergence vectors.
+The condition number equals 2.8 which means this linear system is well conditioned. For 1% change in ordinate vector the solution changes by at most 3%
 </pre>
 </div>
 </div>
